@@ -1,0 +1,23 @@
+doctype html
+html
+ head
+  title Grade Summary
+  link(rel='stylesheet', href='/stylesheets/style.css')
+  script(type='text/javascript', src='/javascripts/editor.js')
+ body
+  h1 Grade Summary
+  p
+   div
+    div(class="name") Name: #{name}
+    div(class="edit" onclick='renameGrade("#{id}")') Edit
+    div Students:
+    ul
+     each student in students
+      li 
+       a(href="/students/#{student.id}") #{student.name}
+    div Subjects:
+    ul
+     each subject in subjects
+       li 
+        a(href="/subject/#{subject.id}") #{subject.name}
+      
