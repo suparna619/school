@@ -6,12 +6,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var app = express();
 var school_routes = require('./own_modules/school_routes');
-// view engine setup
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -24,10 +22,11 @@ app.get('/subjects',school_routes.get_subjects);
 app.get('/students/:id',school_routes.get_student);
 app.get('/grades/:id',school_routes.get_grade_summary);
 app.get('/subject/:id',school_routes.get_subject_summary);
-app.get('/editStudentSummary/:id',school_routes.update_student_summary);
+app.get('/editStudentSummary/:id',school_routes.edit_student_summary);
+
+app.post('/students/:id',school_routes.update_student_summary);
 
 
-// catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;

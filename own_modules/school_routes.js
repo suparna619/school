@@ -59,7 +59,7 @@ exports.get_grade_summary = function(req,res,next){
 	});
 };
 
-exports.update_student_summary = function(req,res){
+exports.edit_student_summary = function(req,res,next){
 	school_records.getStudentSummary(req.params.id,function(err,student){
 		if(!student) 
 			next();
@@ -67,3 +67,14 @@ exports.update_student_summary = function(req,res){
 			res.render('editStudentSummary',student);
 	});
 };
+
+exports.update_student_summary = function(req,res,next){
+	var new_student = req.body;
+	new_student.studentId = req.params.id;
+	console.log(new_student)
+	school_records.updateStudentSummary(new_student,function(err){
+		err && next();
+		res.writeHead(302,{"Location": "/students/"+new_student.studentId});
+		res.end();
+	})
+}

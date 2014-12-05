@@ -85,6 +85,45 @@ var _getSubjectSummary = function(id,db,onComplete){
 
 };
 
+var getSubjectIds = function(new_student){
+	var expression = new RegExp(/^subId_/);
+	var ids = Object.keys(new_student).filter(function(key){
+		return key.match(expression) && key;
+	});
+	return ids.map(function(id){
+		return id.split('_')[1];
+	})
+
+}
+
+var _updateStudentSummary = function(new_student,db,onComplete){
+	var select_query = "select grade_id from students where id="+new_student.studentId;
+	db.get(select_query,function(err,student){
+		err && console.log(err);
+		db.get("select id from grades where name='"+new_student.gradeName+"'",function(egr,grade){
+			new_student.gradeId = grade.id;
+			var grade_query = "update students set grade_id='" + new_student.gradeId+"' where id="+new_student.studentId;
+			db.run(grade_query,function(egr){
+				egr && console.log(egr)
+			});
+		});
+		
+	})
+	var student_query = "update students set name='"+new_student.studentName+"' where id="+new_student.studentId;
+	db.run(student_query,function(err){
+		err && console.log(err);
+	});
+	var ids = getSubjectIds(new_student);
+	ids.forEach(function(id,index,array){
+		var score_query = "update scores set score='"+new_student["subId_"+id]+"' where subject_id="+id+" and student_id="+new_student.studentId ;
+		db.serialize(function(err){
+			db.run(score_query,function(esc){
+				index==array.length-1 && onComplete(null);
+			});
+		});
+	});
+};
+
 var init = function(location){	
 	var operate = function(operation){
 		return function(){
@@ -109,64 +148,11 @@ var init = function(location){
 		getStudentSummary: operate(_getStudentSummary),
 		getGradeSummary: operate(_getGradeSummary),
 		getSubjectSummary: operate(_getSubjectSummary),
-		updateGrade : operate(_updateGrade)
+		updateGrade : operate(_updateGrade),
+		updateStudentSummary : operate(_updateStudentSummary)
 	};
 
 	return records;
 };
 
 exports.init = init;
-////////////////////////////////////
-exports.getSubjects = function(grade,callback){
-	var subjects = grade == 'one' && [
-		{name:'english-1',grade:'one',max:125},
-		{name:'moral science',grade:'one',max:50},
-		{name:'general science',grade:'one',max:100},
-		{name:'maths-1',grade:'one',max:100},
-		{name:'craft',grade:'one',max:25},
-		{name:'music',grade:'one',max:25},
-		{name:'hindi-1',grade:'one',max:75}
-	] || [];
-	callback(null,subjects);
-};
-
-exports.getScoresBySubject = function(subject,callback){
-	var scores = subject != 'craft' && [] || [
-		{name:'Abu',score:20},
-		{name:'Babu',score:18},
-		{name:'Ababu',score:21},
-		{name:'Dababu',score:22},
-		{name:'Badadadababu',score:23},
-		{name:'babudada',score:24}
-	];
-	callback(null,scores);
-};
-
-
-
-
-
-
-
-
-
-
-
-
-	// var subject_query = "select name, grade_id, maxScore from subjects where id ="+id;
-	// db.get(subject_query,function(err,subject){
-	// 	var student_query = "select id,name from students where grade_id="+subject.grade_id;
-	// 	db.all(student_query,function(est,student){
-	// 		subject.student = student;
-	// 		// subject.student.forEach(function(st){
-	// 		// 	db.get('select score from scores where student_id ='+st.id+' and subject_id = '+ id,function(esc,score){
-	// 		// 		score && (st.score=score.score);
-	// 		// 	});
-	// 		// });
-	// 		var grade_query = "select name from grades where id="+subject.grade_id;
-	// 		db.all(grade_query,function(egr,grade){
-	// 			subject.grade = grade;
-	// 			onComplete(null,subject);
-	// 		});
-	// 	});
-	// });

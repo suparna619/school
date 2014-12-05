@@ -111,4 +111,34 @@ describe('school_records',function(){
 			});
 		});
 	});
-})
+
+	describe('#updateStudentSummary',function(){
+		it('update student summary',function(done){
+			var newStudent = {studentId:1,studentName:'Vishnu',
+							gradeName:'2nd std',subId_1:20,subId_2:23,subId_3:50};
+			var expected1 = [{id:1,name:'English-1',score:20,maxScore:100},
+							{id:2,name:'Maths-1',score:23,maxScore:100},
+							{id:3,name:'Moral Science',score:50,maxScore:50}];
+
+			var expected2 =  [{ name: 'Maths-1', id: 2, maxScore: 100, score: 200 }];		
+
+			school_records.updateStudentSummary(newStudent,function(err){
+				assert.notOk(err);
+				school_records.getStudentSummary(2,function(ess,s2){
+					assert.equal(s2.name,'Babu');
+					assert.equal(s2.grade_name,'1st std');
+					assert.deepEqual(s2.subjects,expected2);
+
+					school_records.getStudentSummary(1,function(ess,s1){
+						assert.equal(s1.name,'Vishnu');
+						assert.equal(s1.grade_id,'2');
+						assert.deepEqual(s1.subjects,expected1);
+						done();
+					});
+				});
+							
+
+			});
+		});
+	});
+});
