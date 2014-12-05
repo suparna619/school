@@ -4,7 +4,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var school_records = require('./own_modules/school_records').init('./data/school.db');
 var app = express();
 var school_routes = require('./own_modules/school_routes');
 // view engine setup
