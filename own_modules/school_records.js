@@ -149,8 +149,28 @@ var _updateSubjectSummary = function(new_subject,db,onComplete){
 	});
 };
 
-var _addStudent = function(new_student,db,onComplete){
+var generateStudentId = function(db){
+	var student_query = "select id from students";
+	var lastId;
+	db.serialize(function(){
+		db.all(student_query,function(err,studentIds){
+			lastId = studentIds.reduce(function(pv, cv){
+				return pv.id>cv.id ? pv:cv;
+			});
+			console.log(lastId,"####",studentIds)
+		});	
+	})
+	setTimeout(function(){
+		if(lastId)
+			return lastId.id+1;
+		
+	}, 3000);
+}
+var _addNewStudent = function(new_student,db,onComplete){
+	if(!new_student['$student_id'])
+		new_student['$student_id'] = generateStudentId(db);
 
+	console.log(new_student);
 	var setScore = function(sub,index,array){
 		var score_query = 'insert into scores(student_id,subject_id,score) values('
 			+new_student['$student_id']+','+sub.id+',0)'
@@ -198,7 +218,7 @@ var init = function(location){
 		updateGrade : operate(_updateGrade),
 		updateStudentSummary : operate(_updateStudentSummary),
 		updateSubjectSummary : operate(_updateSubjectSummary),
-		addStudent : operate(_addStudent)
+		addNewStudent : operate(_addNewStudent)
 	};
 
 	return records;

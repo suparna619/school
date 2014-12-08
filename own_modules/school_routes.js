@@ -78,6 +78,10 @@ exports.edit_subject_summary = function(req,res,next){
 	});
 };
 
+exports.add_new_student = function(req,res){
+	res.render('addNewStudent',{id:req.params.id});
+}
+
 exports.update_student_summary = function(req,res,next){
 	var new_student = req.body;
 	new_student.studentId = req.params.id;
@@ -100,6 +104,20 @@ exports.update_subject_summary = function(req,res,next){
 			return;
 		}
 		res.writeHead(302,{"Location": "/subject/"+new_subject.subject_id});
+		res.end();
+	});
+};
+
+exports.insert_new_student = function(req,res,next){
+	var new_student = req.body;
+	new_student['$grade_id'] = req.params.id;
+	console.log(new_student);
+	school_records.addNewStudent(new_student,function(err){
+		if(err){
+			res.end("Invalid Input");
+			return;
+		}
+		res.writeHead(302,{"Location":"/grades/"+new_student['$grade_id']});
 		res.end();
 	});
 };

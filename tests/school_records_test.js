@@ -158,7 +158,7 @@ describe('school_records',function(){
 	describe('#addNewStudent',function(){
 		it('add new student',function(done){
 			var new_student = {'$student_name':"Pinky",'$grade_id':1,'$student_id':8};
-			school_records.addStudent(new_student,function(err){
+			school_records.addNewStudent(new_student,function(err){
 				assert.notOk(err);
 				school_records.getStudentSummary(8,function(est,s){
 					assert.equal(s.name,'Pinky');
