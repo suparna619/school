@@ -80,7 +80,11 @@ exports.edit_subject_summary = function(req,res,next){
 
 exports.add_new_student = function(req,res){
 	res.render('addNewStudent',{id:req.params.id});
-}
+};
+
+exports.add_new_subject = function(req,res){
+	res.render('addNewSubject',{id:req.params.id});
+};
 
 exports.update_student_summary = function(req,res,next){
 	var new_student = req.body;
@@ -108,16 +112,36 @@ exports.update_subject_summary = function(req,res,next){
 	});
 };
 
-exports.insert_new_student = function(req,res,next){
-	var new_student = req.body;
-	new_student['$grade_id'] = req.params.id;
-	console.log(new_student);
-	school_records.addNewStudent(new_student,function(err){
+exports.insert_new_record = function(req,res,next){
+	var new_record = req.body;
+	new_record['$grade_id'] = req.params.id;
+	console.log("===>>",new_record);
+
+	var redirectToGrades = function(err){
 		if(err){
 			res.end("Invalid Input");
 			return;
 		}
-		res.writeHead(302,{"Location":"/grades/"+new_student['$grade_id']});
+		res.writeHead(302,{"Location":"/grades/"+new_record['$grade_id']});
 		res.end();
-	});
+	}
+
+	new_record['$student_name'] && school_records.addNewStudent(new_record,redirectToGrades);
+	new_record['$subject_name'] && school_records.addNewSubject(new_record,redirectToGrades);
+
+
+
 };
+
+// exports.insert_new_subject = function(req,res,next){
+// 	var new_subject = req.body;
+// 	new_subject.grade_id = req.params.id;
+// 	school_records.addNewSubject(new_subject,function(err){
+// 		if(err){
+// 			res.end('Babaji ka Thullu ..|``');
+// 			return;
+// 		};
+// 		res.writeHead(302,{"Location":"/grades/"+new_subject.grade_id});
+// 		res.end();
+// 	})
+// };

@@ -27,7 +27,8 @@ app.post('/students/:id',school_routes.update_student_summary);
 app.get('/editSubjectSummary/:id',school_routes.edit_subject_summary);
 app.post('/subject/:id',school_routes.update_subject_summary);
 app.get('/addNewStudent/:id',school_routes.add_new_student);
-app.post('/grades/:id',school_routes.insert_new_student);
+app.post('/grades/:id',school_routes.insert_new_record);
+app.get('/addNewSubject/:id',school_routes.add_new_subject);
 
 app.use(function(req, res, next) {
     var err = new Error('Not Found');

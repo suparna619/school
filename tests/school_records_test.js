@@ -157,7 +157,7 @@ describe('school_records',function(){
 	//adding
 	describe('#addNewStudent',function(){
 		it('add new student',function(done){
-			var new_student = {'$student_name':"Pinky",'$grade_id':1,'$student_id':8};
+			var new_student = {'$student_name':"Pinky",'$grade_id':1};
 			school_records.addNewStudent(new_student,function(err){
 				assert.notOk(err);
 				school_records.getStudentSummary(8,function(est,s){
@@ -171,4 +171,22 @@ describe('school_records',function(){
 			});
 		});
 	});
+
+	// describe('#addNewSubject',function(){
+	// 	it('add new subject',function(done){
+	// 		var new_subject = {'$subject_name':"French",'$grade_id':1,'$maxScore':50};
+	// 		school_records.addNewSubject(new_subject,function(err){
+	// 			assert.notOk(err);
+	// 			school_records.getSubjectSummary(4,function(est,s){
+	// 				console.log(s);
+	// 				assert.equal(s[0].subject_name,'French');
+	// 				assert.equal(s[0].grade_name,'1st std');
+	// 				assert.equal(s[0].maxScore,50);
+	// 				done();
+	// 			});
+	// 		});
+	// 	});
+	// });
+
+
 });
