@@ -37,6 +37,7 @@ exports.get_subject_summary = function(req,res,next){
 	});
 };
 
+
 var renameGrade = function(req,res){
 	var id = req.path[req.path.length-1];
 	var new_grade = {id:id,newname:req.query.newname};
@@ -68,13 +69,37 @@ exports.edit_student_summary = function(req,res,next){
 	});
 };
 
+exports.edit_subject_summary = function(req,res,next){
+	school_records.getSubjectSummary(req.params.id, function(err,s){
+		if(!s)
+			next();
+		else
+			res.render('editSubjectSummary',s[0]);
+	});
+};
+
 exports.update_student_summary = function(req,res,next){
 	var new_student = req.body;
 	new_student.studentId = req.params.id;
-	console.log(new_student)
 	school_records.updateStudentSummary(new_student,function(err){
-		err && next();
+		if(err){
+			res.end("Invalid Input");
+			return;			
+		}
 		res.writeHead(302,{"Location": "/students/"+new_student.studentId});
 		res.end();
 	})
-}
+};
+
+exports.update_subject_summary = function(req,res,next){
+	var new_subject = req.body;
+	new_subject.subject_id = req.params.id;
+	school_records.updateSubjectSummary(new_subject,function(err){
+		if(err){
+			res.end("Invalid Input");
+			return;
+		}
+		res.writeHead(302,{"Location": "/subject/"+new_subject.subject_id});
+		res.end();
+	});
+};

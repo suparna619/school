@@ -4,7 +4,7 @@ html
   title Subject Summary
   link(rel='stylesheet', href='/stylesheets/style.css')  
  body
-  h1 Subject Summary
+  h1 Subject Summary 
   table(border=1)
    tr 
    th #{subject[0].subject_name}
@@ -19,3 +19,5 @@ html
      td
       a(href="/students/#{sb.student_id}") #{sb.student_name}
      td #{sb.score}
+  br
+  button(type="button" onclick="location.href='/editSubjectSummary/#{subject[0].subject_id}'") Edit
