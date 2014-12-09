@@ -188,6 +188,7 @@ var _addNewStudent = function(new_student,db,onComplete){
 };
 
 var _addNewSubject = function(new_subject,db,onComplete){
+	console.log("=======>>")
 	var subject_id_query = "select id from subjects";
 	var lastId;
 	db.all(subject_id_query,function(err,subjectIds){

@@ -88,10 +88,10 @@ exports.add_new_subject = function(req,res){
 
 exports.add_new_score = function(req,res,next){
 	var subject_id = req.params.id;
-	school_records.getSubjectSummary(subject_id,function(err,subject){
-		console.log("==>>",subject)
-		res.render('addNewScore',{subject:subject})
-	})
+	// school_records.getSubjectSummary(subject_id,function(err,subject){
+	// 	console.log("==>>",subject)
+	// 	res.render('addNewScore',{subject:subject})
+	// })
 };
 
 exports.update_student_summary = function(req,res,next){
