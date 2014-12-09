@@ -188,10 +188,32 @@ var _addNewStudent = function(new_student,db,onComplete){
 };
 
 var _addNewSubject = function(new_subject,db,onComplete){
+	var subject_id_query = "select id from subjects";
+	var lastId;
+	db.all(subject_id_query,function(err,subjectIds){
+		lastId = subjectIds.reduce(function(pv, cv){
+			return pv.id>cv.id ? pv:cv;
+		});
+	});	
+
+	var setScore = function(id,index,ids){
+		var score_query = 'insert into scores(student_id,subject_id,score)'+
+			' values('+id.id+','+(lastId.id+1)+',0);'
+		db.run(score_query,function(err){
+			err && console.log(err);
+			if(index==ids.length-1){
+				onComplete(null);
+				return;
+			};
+		})
+	}
 	var subject_query = 'insert into subjects(name,grade_id,maxScore) values($subject_name,$grade_id,$maxScore);';
 	db.run(subject_query,new_subject,function(err){
-		db.get('select * from subjects where id=4',function(err,s){})
-		onComplete(null);
+		err && console.log(err);
+	});
+
+	db.all('select id from students where grade_id='+new_subject['$grade_id'],function(err,students){
+		students.forEach(setScore)
 	})
 };
 

@@ -172,21 +172,22 @@ describe('school_records',function(){
 		});
 	});
 
-	// describe('#addNewSubject',function(){
-	// 	it('add new subject',function(done){
-	// 		var new_subject = {'$subject_name':"French",'$grade_id':1,'$maxScore':50};
-	// 		school_records.addNewSubject(new_subject,function(err){
-	// 			assert.notOk(err);
-	// 			school_records.getSubjectSummary(4,function(est,s){
-	// 				console.log(s);
-	// 				assert.equal(s[0].subject_name,'French');
-	// 				assert.equal(s[0].grade_name,'1st std');
-	// 				assert.equal(s[0].maxScore,50);
-	// 				done();
-	// 			});
-	// 		});
-	// 	});
-	// });
+	describe('#addNewSubject',function(){
+		it('add new subject',function(done){
+			var new_subject = {'$subject_name':"French",'$grade_id':1,'$maxScore':50};
+			school_records.addNewSubject(new_subject,function(err){
+				assert.notOk(err);
+				school_records.getSubjectSummary(4,function(est,s){
+					assert.equal(s.length,4);
+					assert.equal(s[0].score,0);
+					assert.equal(s[0].subject_name,'French');
+					assert.equal(s[0].grade_name,'1st std');
+					assert.equal(s[0].maxScore,50);
+					done();
+				});
+			});
+		});
+	});
 
 
 });
