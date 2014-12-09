@@ -86,6 +86,14 @@ exports.add_new_subject = function(req,res){
 	res.render('addNewSubject',{id:req.params.id});
 };
 
+exports.add_new_score = function(req,res,next){
+	var subject_id = req.params.id;
+	school_records.getSubjectSummary(subject_id,function(err,subject){
+		console.log("==>>",subject)
+		res.render('addNewScore',{subject:subject})
+	})
+};
+
 exports.update_student_summary = function(req,res,next){
 	var new_student = req.body;
 	new_student.studentId = req.params.id;
@@ -132,16 +140,3 @@ exports.insert_new_record = function(req,res,next){
 
 
 };
-
-// exports.insert_new_subject = function(req,res,next){
-// 	var new_subject = req.body;
-// 	new_subject.grade_id = req.params.id;
-// 	school_records.addNewSubject(new_subject,function(err){
-// 		if(err){
-// 			res.end('Babaji ka Thullu ..|``');
-// 			return;
-// 		};
-// 		res.writeHead(302,{"Location":"/grades/"+new_subject.grade_id});
-// 		res.end();
-// 	})
-// };

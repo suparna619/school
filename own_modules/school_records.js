@@ -198,7 +198,7 @@ var _addNewSubject = function(new_subject,db,onComplete){
 
 	var setScore = function(id,index,ids){
 		var score_query = 'insert into scores(student_id,subject_id,score)'+
-			' values('+id.id+','+(lastId.id+1)+',0);'
+			' values('+id.id+','+(lastId.id+1)+',"-");'
 		db.run(score_query,function(err){
 			err && console.log(err);
 			if(index==ids.length-1){
@@ -215,6 +215,10 @@ var _addNewSubject = function(new_subject,db,onComplete){
 	db.all('select id from students where grade_id='+new_subject['$grade_id'],function(err,students){
 		students.forEach(setScore)
 	})
+};
+
+var _getNewStudents = function(subjectId,db,onComplete){
+	var student_query = 'select '
 };
 
 var init = function(location){	
@@ -245,7 +249,8 @@ var init = function(location){
 		updateStudentSummary : operate(_updateStudentSummary),
 		updateSubjectSummary : operate(_updateSubjectSummary),
 		addNewStudent : operate(_addNewStudent),
-		addNewSubject : operate(_addNewSubject)
+		addNewSubject : operate(_addNewSubject),
+		getNewStudents : operate(_getNewStudents)
 	};
 
 	return records;

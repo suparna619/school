@@ -179,7 +179,7 @@ describe('school_records',function(){
 				assert.notOk(err);
 				school_records.getSubjectSummary(4,function(est,s){
 					assert.equal(s.length,4);
-					assert.equal(s[0].score,0);
+					assert.equal(s[0].score,'-');
 					assert.equal(s[0].subject_name,'French');
 					assert.equal(s[0].grade_name,'1st std');
 					assert.equal(s[0].maxScore,50);
