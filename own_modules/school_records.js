@@ -188,7 +188,6 @@ var _addNewStudent = function(new_student,db,onComplete){
 };
 
 var _addNewSubject = function(new_subject,db,onComplete){
-	console.log("=======>>")
 	var subject_id_query = "select id from subjects";
 	var lastId;
 	db.all(subject_id_query,function(err,subjectIds){
@@ -219,7 +218,25 @@ var _addNewSubject = function(new_subject,db,onComplete){
 };
 
 var _getNewStudents = function(subjectId,db,onComplete){
-	var student_query = 'select '
+	var allNewStudents = [];
+	var student_query = 'select student_id from scores where score="-" and subject_id='+subjectId;
+	db.all(student_query,function(err,studentIds){
+		studentIds.forEach(function(s,index,ids){
+			_getStudentSummary(s.student_id,db,function(err,student){
+				student.subjects = student.subjects.filter(function(sub){
+					return sub.score == '-';
+				});
+				allNewStudents.push(student);
+				if(ids.length-1 == index){
+					db.close(function(err){
+						onComplete(null,allNewStudents);
+						return;
+					});
+				}
+			});
+
+		});
+	});
 };
 
 var init = function(location){	

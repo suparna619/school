@@ -189,5 +189,19 @@ describe('school_records',function(){
 		});
 	});
 
+	describe('#getNewStudents',function(){
+		it('get new student',function(done){
+			var new_subject = {'$subject_name':"French",'$grade_id':1,'$maxScore':50};
+			school_records.addNewSubject(new_subject,function(err){
+				school_records.getNewStudents(4,function(err,newStudents){
+					assert.notOk(err);
+					assert.lengthOf(newStudents,4);
+					assert.deepEqual(newStudents[0].subjects,[{name:'French',id:4,maxScore:50,score:'-'}]);
+					done();
+				});
+			});
+		});
+	});
+
 
 });
