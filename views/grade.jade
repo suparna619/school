@@ -9,7 +9,7 @@ html
   p
    div
     div(class="name") Name: #{name}
-    div(class="edit" onclick='renameGrade("#{id}")') Edit
+    div(class="edit" onclick='renameGrade("#{id}")') Click here to Edit Grade
     div Students:
     ul
      each student in students
@@ -21,6 +21,7 @@ html
        li 
         a(href="/subject/#{subject.id}") #{subject.name}
   button(type='button', onclick="location.href='/addNewStudent/#{id}'") Add New Student
+  | 
   button(type='button', onclick="location.href='/addNewSubject/#{id}'") Add New Subject
 
       

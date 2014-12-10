@@ -9,9 +9,11 @@ a {
 
 .edit {
 	display: inline;
-	border: 1px solid black;
-	float: right;
+	/*border: 1px solid black;*/
+	/*float: right;*/
 	padding: 5px;
+	color: steelblue;
+	text-decoration: underline;
 }
 
 .name {

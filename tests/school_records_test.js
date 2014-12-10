@@ -163,9 +163,14 @@ describe('school_records',function(){
 				school_records.getStudentSummary(8,function(est,s){
 					assert.equal(s.name,'Pinky');
 					assert.equal(s.grade_name,'1st std');
-					assert.deepEqual(s.subjects,[{id:1,name:'English-1',maxScore:100,score:0},
-						{id:2,name:'Maths-1',maxScore:100,score:0},
-						{id:3,name:'Moral Science',maxScore:50,score:0}]);
+					var subjects = JSON.stringify(s.subjects);
+					var s1 = JSON.stringify({"name":"English-1","id":1,"maxScore":100,"score":"-"});
+					var s2 = JSON.stringify({"name":"Maths-1","id":2,"maxScore":100,"score":"-"});
+					var s3 = JSON.stringify({"name":"Moral Science","id":3,"maxScore":50,"score":"-"});
+	
+					assert.ok(subjects.indexOf(s1) >= 0);
+					assert.ok(subjects.indexOf(s2) >= 0);
+					assert.ok(subjects.indexOf(s3) >= 0);
 					done();
 				});
 			});
@@ -189,19 +194,39 @@ describe('school_records',function(){
 		});
 	});
 
-	describe('#getNewStudents',function(){
-		it('get new student',function(done){
-			var new_subject = {'$subject_name':"French",'$grade_id':1,'$maxScore':50};
-			school_records.addNewSubject(new_subject,function(err){
-				school_records.getNewStudents(4,function(err,newStudents){
-					assert.notOk(err);
-					assert.lengthOf(newStudents,4);
-					assert.deepEqual(newStudents[0].subjects,[{name:'French',id:4,maxScore:50,score:'-'}]);
-					done();
+	describe('#updateSubjectSummary',function(){
+		it('update score of student',function(done){
+			var new_subject = {'$score_1':30,'$subject_id':3};
+			// school_records.updateSubjectSummary(new_subject,function(err){
+			// 	assert.notOk(err);
+			// 	school_records.getStudentSummary(1,function(esb,s){
+			// 		assert.equal(s.name,'Abu');
+			// 		assert.equal(s.grade_name,'1st std');
+			// 		assert.deepEqual(s.subjects,[{id:1,name:'English-1',score:75,maxScore:100},
+			// 		{id:2,name:'Maths-1',score:50,maxScore:100},
+			// 		{id:3,name:'Moral Science',score:25,maxScore:50}]);
+			// 	});
+			// });
+			
+			var new_subject_detail = {'$subject_name':"Spanish",'$grade_id':1,'$maxScore':50};
+			school_records.addNewSubject(new_subject_detail,function(err){
+				assert.notOk(err);
+				var new_subject = {'$score_1':30,'$subject_id':4};
+				school_records.updateSubjectSummary(new_subject,function(er){
+				
+					assert.notOk(er);
+
+					school_records.getSubjectSummary(4,function(esb,s){
+						
+						var student_1st = s.filter(function(subject){return subject.student_id==1;})[0];
+
+						 assert.equal(student_1st.score,30);
+						
+						done();
+					});
 				});
 			});
-		});
+		});	
+
 	});
-
-
 });

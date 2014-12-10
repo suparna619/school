@@ -87,14 +87,10 @@ exports.add_new_subject = function(req,res){
 };
 
 exports.add_new_score = function(req,res,next){
-	var subject_id = req.params.id;
-	school_records.getNewStudents(subject_id,function(err,students){
-		res.send(students);
-	})
-	// school_records.getSubjectSummary(subject_id,function(err,subject){
-	// 	console.log("==>>",subject)
-	// 	res.render('addNewScore',{subject:subject})
-	// })
+	var ids = {};
+	ids.subject_id = req.params.subject_id;
+	ids.student_id = req.params.student_id;
+	res.render('addNewScore',{ids:ids});
 };
 
 exports.update_student_summary = function(req,res,next){
@@ -126,7 +122,6 @@ exports.update_subject_summary = function(req,res,next){
 exports.insert_new_record = function(req,res,next){
 	var new_record = req.body;
 	new_record['$grade_id'] = req.params.id;
-	console.log("===>>",new_record);
 
 	var redirectToGrades = function(err){
 		if(err){
