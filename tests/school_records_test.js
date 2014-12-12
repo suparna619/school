@@ -139,20 +139,6 @@ describe('school_records',function(){
 			});
 		});
 	});
-	describe('#updateSubjectSummary',function(){
-		it('update subjects summary',function(done){
-			var new_subject = {subject_id:2,subject_name:'Phoose Ball',grade_name:'2nd std',maxScore:50};
-			school_records.updateSubjectSummary(new_subject,function(err){
-				assert.notOk(err);
-				school_records.getSubjectSummary(2,function(esb,sub){
-					assert.equal(sub[0].subject_name,'Phoose Ball');
-					assert.equal(sub[0].maxScore,50);
-					assert.equal(sub[0].grade_id,1);
-					done();
-				});
-			});
-		});		
-	});
 
 	//adding
 	describe('#addNewStudent',function(){
@@ -228,5 +214,19 @@ describe('school_records',function(){
 			});
 		});	
 
+	});
+	describe('#updateSubjectSummary',function(){
+		it('update subjects summary',function(done){
+			var new_subject = {'$subject_id':2,subject_name:'Phoose Ball',grade_name:'2nd std',maxScore:50};
+			school_records.updateSubjectSummary(new_subject,function(err){
+				assert.notOk(err);
+				school_records.getSubjectSummary(2,function(esb,sub){
+					assert.equal(sub[0].subject_name,'Phoose Ball');
+					assert.equal(sub[0].maxScore,50);
+					assert.equal(sub[0].grade_id,1);
+					done();
+				});
+			});
+		});		
 	});
 });

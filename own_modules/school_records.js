@@ -89,6 +89,7 @@ var getSubjectIds = function(new_student){
 };
 
 var updateGradeId=function(new_student,db,onComplete){
+	console.log(new_student,"----------->>previous");
 	db.get("select id from grades where name='"+new_student.gradeName+"'",function(egr,grade){
 		if(!grade){
 			egr=true;
@@ -100,6 +101,7 @@ var updateGradeId=function(new_student,db,onComplete){
 		db.run(grade_query,function(egr){
 			egr && console.log(egr)
 		});
+		console.log(new_student,"----------->>");
 	});
 };
 
@@ -129,15 +131,13 @@ var _updateStudentSummary = function(new_student,db,onComplete){
 
 var updateSubject = function(new_subject,db,onComplete){
 	var subject_query = "update subjects set name='"+new_subject.subject_name
-		+"', maxScore="+new_subject.maxScore+" where id="+new_subject.subject_id;
+		+"', maxScore="+new_subject.maxScore+" where id="+new_subject['$subject_id'];
 	
 	db.run(subject_query,function(err){
 		err && console.log(err);
 		var subject_grade_query = 'update subjects set grade_id='+new_subject.grade_id+
-			" where id="+new_subject.subject_id;
-		db.run(subject_grade_query,function(egr){
-			onComplete(null);
-		});
+			" where id="+new_subject['$subject_id'];
+		db.run(subject_grade_query,onComplete);
 	});
 };
 
@@ -148,8 +148,8 @@ var addScore = function(new_subject,db,onComplete) {
 			score=key;
 	});
 	new_subject['$student_id'] =score.split('_')[1];
-	var update_score_query = 'update scores set score= $score_'+new_subject['$student_id']+' where student_id=$student_id'+
-		' and subject_id=$subject_id';
+	var update_score_query = 'update scores set score= $score_'+new_subject['$student_id']+
+	' where student_id=$student_id and subject_id=$subject_id';
 	db.run(update_score_query,new_subject,onComplete);
 };
 
@@ -157,8 +157,6 @@ var _updateSubjectSummary = function(new_subject,db,onComplete){
 	var isScorePresent = Object.keys(new_subject).some(function(key){
 		return key.indexOf('$score')==0;
 	});
-
-
 	if(isScorePresent){
 		addScore(new_subject,db,onComplete);
 		return;
@@ -167,7 +165,7 @@ var _updateSubjectSummary = function(new_subject,db,onComplete){
 	db.get(grade_query,function(egr,grade){
 		if(!grade){
 			egr=true;
-			onComplete(egr);
+			onComplete(null);
 			return;
 		}
 		new_subject.grade_id = grade.id;
@@ -222,6 +220,7 @@ var _addNewSubject = function(new_subject,db,onComplete){
 				};
 			});
 		};
+		
 		var subject_query = 'insert into subjects(name,grade_id,maxScore)'+
 			'values($subject_name,$grade_id,$maxScore);';
 		db.run(subject_query,new_subject,function(err){

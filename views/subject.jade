@@ -14,14 +14,17 @@ html
   table(border=1 )
    th Student Name
    th Score
+   th Update
    each sb in subject
     tr 
      td
       a(href="/students/#{sb.student_id}") #{sb.student_name}
      td #{sb.score}
+     td
+      a(href ="/addNewScore/#{sb.subject_id}/#{sb.student_id}") Edit
   br
   button(type="button" onclick="location.href='/editSubjectSummary/#{subject[0].subject_id}'") Edit Subject Summary
   br
   br
-  button(type="button" onclick="location.href='/addNewScore/#{subject[0].subject_id}/#{subject[0].student_id}'") Add Score
+
 

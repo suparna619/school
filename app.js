@@ -16,6 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/error',school_routes.showError);
 app.get('/grades',school_routes.get_grades);
 app.get('/students',school_routes.get_students);
 app.get('/subjects',school_routes.get_subjects);
@@ -23,6 +24,8 @@ app.get('/students/:id',school_routes.get_student);
 app.get('/grades/:id',school_routes.get_grade_summary);
 app.get('/subject/:id',school_routes.get_subject_summary);
 app.get('/editStudentSummary/:id',school_routes.edit_student_summary);
+app.post('/editStudentSummary/:id',school_routes.update_grade);
+
 app.post('/students/:id',school_routes.update_student_summary);
 app.get('/editSubjectSummary/:id',school_routes.edit_subject_summary);
 app.post('/subject/:id',school_routes.update_subject_summary);
