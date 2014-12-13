@@ -6,8 +6,6 @@ html
  body
   h1 Edit Student Summary
   form(action='/editStudentSummary/#{id}' method='post')
-   | Student Name:
-   input(type='text' value = '#{name}' name='studentName' required)
    br
    br
    | Grade:
@@ -17,8 +15,13 @@ html
    br
 
   form(action='/students/#{id}' method='post')
+   | Student Name:
+   input(type='text' value = '#{name}' name='studentName' required)
+   br
    each sub in subjects
+    br
     | #{sub.name}:
     input(type="number" value='#{sub.score}' name='subId_#{sub.id}' max='#{sub.maxScore}' min='0' required)
+    br
     br
    input(type='submit' value='Change Score')

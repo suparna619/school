@@ -1,10 +1,35 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+
 }
 
 a {
-  color: #00B7FF;
+  color: #003333;
+}
+
+h1 {
+	color: #000033;
+	text-align: center;
+}
+
+div {
+	border: 3px #380000 solid;
+	padding: 20px;
+}
+
+.headerContainer {
+	height: auto;
+	width: auto;
+	border: 1px black solid;
+	padding: 5px;
+}
+
+.bodyContainer {
+	height: 100%;
+	width: 100%;
+	border: 1px black solid;
+	padding: 5px;
 }
 
 .edit {

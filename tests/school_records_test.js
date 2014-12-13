@@ -115,7 +115,7 @@ describe('school_records',function(){
 	describe('#updateStudentSummary',function(){
 		it('update student summary',function(done){
 			var newStudent = {studentId:1,studentName:'Vishnu',
-							gradeName:'1st std',subId_1:20,subId_2:23,subId_3:50};
+							subId_1:20,subId_2:23,subId_3:50};
 			var expected1 = [{id:1,name:'English-1',score:20,maxScore:100},
 							{id:2,name:'Maths-1',score:23,maxScore:100},
 							{id:3,name:'Moral Science',score:50,maxScore:50}];

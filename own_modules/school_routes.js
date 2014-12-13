@@ -96,18 +96,16 @@ exports.add_new_score = function(req,res,next){
 exports.update_student_summary = function(req,res,next){
 	var new_student = req.body;
 	new_student.studentId = req.params.id;
+	console.log("newwwwwwwwwwwwwwwwwwwwwwwwww",new_student);
 	school_records.updateStudentSummary(new_student,function(err){
-		console.log('======',err);
+		console.log('======');
 		if(err){
-			res.send("Invalid Input----------");
-			return;			
+			res.send(err);		
 		}
 		else{
 			console.log("else..............")
 			res.redirect("/students/"+new_student.studentId);
 		}
-		// res.writeHead(302,{"Location": "/students/"+new_student.studentId});
-		// res.end();
 	})
 };
 
@@ -135,8 +133,6 @@ exports.insert_new_record = function(req,res,next){
 			return;
 		}
 		res.redirect("/grades/"+new_record['$grade_id']);
-		// res.writeHead(302,{"Location":"/grades/"+new_record['$grade_id']});
-		// res.end();
 	}
 
 	new_record['$student_name'] && school_records.addNewStudent(new_record,redirectToGrades);
@@ -145,4 +141,14 @@ exports.insert_new_record = function(req,res,next){
 
 exports.showError = function(req,res){
 	res.render('displayError');
+};
+
+exports.update_grade = function(req,res){
+	var new_grade = req.body;
+	new_grade.studentId = req.params.id;
+	console.log(new_grade);
+	school_records.updateGradeOfStudent(new_grade,function(er){
+		res.redirect('/editStudentSummary/'+new_grade.studentId);
+	})
+	console.log(new_grade);
 };

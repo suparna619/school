@@ -88,22 +88,64 @@ var getSubjectIds = function(new_student){
 
 };
 
-var updateGradeId=function(new_student,db,onComplete){
-	console.log(new_student,"----------->>previous");
-	db.get("select id from grades where name='"+new_student.gradeName+"'",function(egr,grade){
+var _updateGradeOfStudent = function(new_grade,db,onComplete){
+	db.get("select id from grades where name='"
+	 +new_grade.gradeName+"'",function(egr,grade){
 		if(!grade){
 			egr=true;
 			onComplete(egr);
 			return;
 		}
-		new_student.gradeId = grade.id;
-		var grade_query = "update students set grade_id='" + new_student.gradeId+"' where id="+new_student.studentId;
+		new_grade.gradeId = grade.id;
+		var grade_query = "update students set grade_id='" + 
+			new_grade.gradeId+"' where id="+new_grade.studentId;
 		db.run(grade_query,function(egr){
 			egr && console.log(egr)
+
+			var subject_query = 'select id from subjects where grade_id='+
+				new_grade.gradeId;
+
+			db.all(subject_query,function(er,subjectIDs){
+				console.log(subject_query,"====>",subjectIDs)
+				subjectIDs.forEach(setScore)
+			});
 		});
-		console.log(new_student,"----------->>");
 	});
+
+	var setScore = function(sub,index,ids){
+		var delete_previous_records = 'delete from scores where student_id='+
+		 new_grade.studentId+' and subject_id='+sub.id;
+		var score_query = 'insert into scores(student_id,subject_id,score) values ('+
+			new_grade.studentId+','+sub.id+', "-");';
+
+		db.run(delete_previous_records,function(edr){	
+			edr && console.log(edr);
+			db.run(score_query,function(err){
+				err && console.log(err);
+			});
+			if(index == ids.length-1){
+				onComplete(null);
+			}
+		});
+	};
 };
+
+// var updateGradeId=function(new_student,db,onComplete){
+// 	console.log(new_student,"----------->>previous");
+// 	db.get("select id from grades where name='"+new_student.gradeName+"'",function(egr,grade){
+// 		if(!grade){
+// 			egr=true;
+// 			onComplete(egr);
+// 			return;
+// 		}
+// 		new_student.gradeId = grade.id;
+// 		var grade_query = "update students set grade_id='" + new_student.gradeId+"' where id="+new_student.studentId;
+// 		db.run(grade_query,function(egr){
+// 			egr && console.log(egr)
+// 		});
+// 		console.log(new_student,"----------->>");
+// 	});
+// };
 
 var updateStudentName=function(new_student,db){
 	var student_query = "update students set name='"+new_student.studentName+"' where id="+new_student.studentId;
@@ -112,10 +154,20 @@ var updateStudentName=function(new_student,db){
 	});
 };
 
+var isScorePresent = function(key){
+	return key.match(/^subId_/);
+};
+
 var _updateStudentSummary = function(new_student,db,onComplete){
-	updateGradeId(new_student,db,onComplete);
+	// updateGradeId(new_student,db,onComplete);
 	updateStudentName(new_student,db);
 
+	var isScore = Object.keys(new_student).some(isScorePresent);
+	console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`",isScore)
+	if(!isScore){
+		onComplete(null);
+		return;
+	}
 	var ids = getSubjectIds(new_student);
 	ids.forEach(function(id,index,array){
 		var score_query = "update scores set score='"+new_student["subId_"+id]
@@ -263,7 +315,8 @@ var init = function(location){
 		updateStudentSummary : operate(_updateStudentSummary),
 		updateSubjectSummary : operate(_updateSubjectSummary),
 		addNewStudent : operate(_addNewStudent),
-		addNewSubject : operate(_addNewSubject)
+		addNewSubject : operate(_addNewSubject),
+		updateGradeOfStudent : operate(_updateGradeOfStudent)
 	};
 
 	return records;
