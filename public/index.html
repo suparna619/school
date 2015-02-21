@@ -2,17 +2,36 @@
 <head>
 	<title>The School Records</title>
 	<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+	<script type="text/javascript" src="javascripts/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="javascripts/app-main.js"></script>
 </head>
 <body>
 	<div class='bodyContainer'>
-		<div>
-			<div class='headerContainer'><h1>THOUGHTWORKS - STEP</h1></div>
+		<div class='list_image_container'>
+			
+			<div class='headerContainer'>
+				<h1>
+					<a href="http://www.thoughtworks.com/">THOUGHTWORKS - STEP</a>
+				</h1>
+			</div>
+			
 			<h3>The School Records :</h3>
+			
 			<ul>
 				<li> <a href="/students">List of Students</a></li>
 				<li> <a href="/subjects">List of Subjects</a></li>
 				<li> <a href="/grades">List of Grades</a></li>
 			</ul>
+			
+			<br>
+			<br>
+			
+			<div id="cycler" class="image">
+				<img class="active" src="./stylesheets/images/img1.jpg" alt="My image" height=275 width=600 />
+				<img src="./stylesheets/images/img2.jpg" alt="My image" height=275 width=600 />
+				<img src="./stylesheets/images/img3.jpg" alt="My image" height=275 width=600 />	
+				<img src="./stylesheets/images/img4.jpg" alt="My image" height=275 width=600 />
+			</div>
 		</div>
 	</div>
 </body>

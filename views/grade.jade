@@ -9,7 +9,10 @@ html
   p
    div
     div(class="name") Name: #{name}
-    div(class="edit" onclick='renameGrade("#{id}")') Click here to Edit Grade
+     br
+     form(action='/grades/#{id}' method="post")
+      input(type='text' placeholder="Enter Grade Name" name='newname')
+      input(type="submit" value="Edit grade")    
     div Students:
     ul
      each student in students

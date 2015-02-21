@@ -106,7 +106,6 @@ var _updateGradeOfStudent = function(new_grade,db,onComplete){
 				new_grade.gradeId;
 
 			db.all(subject_query,function(er,subjectIDs){
-				console.log(subject_query,"====>",subjectIDs)
 				subjectIDs.forEach(setScore)
 			});
 		});

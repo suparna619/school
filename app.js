@@ -33,6 +33,7 @@ app.get('/addNewStudent/:id',school_routes.add_new_student);
 app.post('/grades/:id',school_routes.insert_new_record);
 app.get('/addNewSubject/:id',school_routes.add_new_subject);
 app.get('/addNewScore/:subject_id/:student_id',school_routes.add_new_score);
+// app.post('/grades/:id',school_routes.renameGrade);
 
 app.use(function(req, res, next) {
     var err = new Error('Not Found');

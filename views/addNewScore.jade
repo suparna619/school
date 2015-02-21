@@ -1,0 +1,15 @@
+doctype html
+html
+ head
+  title Add New Score
+ body
+  h1 Add Score /subject/#{ids.subject_id}
+  form(action='/subject/#{ids.subject_id}' method="post")
+   |Student ID : #{ids.student_id}
+   br
+   |Subject ID : #{ids.subject_id}
+   br
+   |Score : 
+   input(type="number" placeholder="Enter Your Score" name="$score_#{ids.student_id}" required)
+   br
+   input(type="submit" value="submit")

@@ -1,7 +1,6 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-
 }
 
 a {
@@ -11,11 +10,6 @@ a {
 h1 {
 	color: #000033;
 	text-align: center;
-}
-
-div {
-	border: 3px #380000 solid;
-	padding: 20px;
 }
 
 .headerContainer {
@@ -28,19 +22,31 @@ div {
 .bodyContainer {
 	height: 100%;
 	width: 100%;
-	border: 1px black solid;
+	border: 1px green solid;
 	padding: 5px;
 }
 
-.edit {
-	display: inline;
-	/*border: 1px solid black;*/
-	/*float: right;*/
-	padding: 5px;
-	color: steelblue;
-	text-decoration: underline;
+.list_image_container {
+	height: 98%;
+	width: 99%;
+	border: 1px brown solid;
+	padding: 5px;	
 }
 
-.name {
-	display: inline;
+.image {
+	padding-left:200px; 
+	padding-top:5px;
+}
+
+#cycler{
+	position:relative;
+}
+
+#cycler img{
+	position:absolute;
+	z-index:1
+}
+
+#cycler img.active{
+	z-index:3
 }

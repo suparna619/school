@@ -1,0 +1,14 @@
+doctype html
+html
+ head
+  title Add New Subject
+ body
+  h1 Add New Subject
+  br
+  br
+  form(action='/grades/#{id}' method="post")
+   |Subject Name:
+   input(type="text" placeholder="Enter Subject Name" name='$subject_name' required)
+   |Max Score :
+   input(type="number" placeholder="Enter Maximum Score" name="$maxScore" required)
+   input(type="submit" value="Submit")

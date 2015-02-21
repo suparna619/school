@@ -38,20 +38,12 @@ exports.get_subject_summary = function(req,res,next){
 };
 
 
-var renameGrade = function(req,res){
-	var id = req.path[req.path.length-1];
-	var new_grade = {id:id,newname:req.query.newname};
-	school_records.updateGrade(new_grade,function(err){
-		res.writeHead(302,{"Location": "/grades/"+id});
-		res.end();
-	});
+var renameGrade = function(new_record,onComplete){
+	new_record.id = new_record['$grade_id'];
+	school_records.updateGrade(new_record,onComplete);
 };
 
 exports.get_grade_summary = function(req,res,next){
-	if(req.query.newname){
-		renameGrade(req,res);
-		return; 
-	}
 	school_records.getGradeSummary(req.params.id,function(err,grade){		
 		if(!grade)
 			next();
@@ -96,14 +88,11 @@ exports.add_new_score = function(req,res,next){
 exports.update_student_summary = function(req,res,next){
 	var new_student = req.body;
 	new_student.studentId = req.params.id;
-	console.log("newwwwwwwwwwwwwwwwwwwwwwwwww",new_student);
 	school_records.updateStudentSummary(new_student,function(err){
-		console.log('======');
 		if(err){
 			res.send(err);		
 		}
 		else{
-			console.log("else..............")
 			res.redirect("/students/"+new_student.studentId);
 		}
 	})
@@ -118,17 +107,14 @@ exports.update_subject_summary = function(req,res,next){
 			return;
 		}
 		res.redirect("/subject/"+new_subject['$subject_id'])
-		// res.end();
 	});
 };
 
 exports.insert_new_record = function(req,res,next){
 	var new_record = req.body;
 	new_record['$grade_id'] = req.params.id;
-
 	var redirectToGrades = function(err){
 		if(err){
-			console.log("redirecting............")
 			res.redirect("/error");
 			return;
 		}
@@ -137,6 +123,7 @@ exports.insert_new_record = function(req,res,next){
 
 	new_record['$student_name'] && school_records.addNewStudent(new_record,redirectToGrades);
 	new_record['$subject_name'] && school_records.addNewSubject(new_record,redirectToGrades);
+	new_record['newname'] && renameGrade(new_record,redirectToGrades);
 };
 
 exports.showError = function(req,res){
